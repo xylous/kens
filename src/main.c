@@ -78,6 +78,7 @@ int **create_grid(void)
  */
 void update_grid(int ***grid, struct SnakeNode *head)
 {
+    /* Reinitialise the grid */
     free(*grid);
     (*grid) = create_grid();
 
@@ -122,6 +123,18 @@ void link(struct SnakeNode **from, struct SnakeNode **to)
 {
     (*from)->next = *to;
     (*to)->prev = *from;
+}
+
+/**
+ * Return the last element in a snake bundle.
+ */
+struct SnakeNode *last_node(struct SnakeNode *head)
+{
+    for (; ; head = head->next) {
+        if (head->next == NULL) {
+            return head;
+        }
+    }
 }
 
 int main(int argc, char **argv)
