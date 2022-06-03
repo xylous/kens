@@ -43,6 +43,7 @@ struct SnakeNode
     int x;
     int y;
     enum direction dir;
+    struct SnakeNode *prev;
     struct SnakeNode *next;
 };
 
@@ -77,6 +78,9 @@ int **create_grid(void)
  */
 void update_grid(int ***grid, struct SnakeNode *head)
 {
+    free(*grid);
+    (*grid) = create_grid();
+
     (*grid)[head->y][head->x] = GRID_HEAD;
 
     for (struct SnakeNode *body = head->next; body != NULL; body = body->next) {
@@ -111,14 +115,25 @@ void render_grid(int **grid)
     }
 }
 
+/**
+ * Link two snake nodes together
+ */
+void link(struct SnakeNode **from, struct SnakeNode **to)
+{
+    (*from)->next = *to;
+    (*to)->prev = *from;
+}
+
 int main(int argc, char **argv)
 {
     printf("Hello snake!\n");
 
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
-    struct SnakeNode *body = new_snakenode(0, 1);
-    head->next = body;
+    struct SnakeNode *last = new_snakenode(0, 1);
+    head->dir = right;
+    link(&head, &last);
+
     update_grid(&grid, head);
     render_grid(grid);
 
