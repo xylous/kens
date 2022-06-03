@@ -137,6 +137,40 @@ struct SnakeNode *last_node(struct SnakeNode *head)
     }
 }
 
+/**
+ * Update the head cell with the new position
+ */
+void move_head(struct SnakeNode **head)
+{
+    switch ((*head)->dir) {
+        case up:
+            (*head)->y++;
+            break;
+        case down:
+            (*head)->y--;
+            break;
+        case right:
+            (*head)->x++;
+            break;
+        case left:
+            (*head)->x--;
+            break;
+    }
+}
+
+/**
+ * Move the snake along
+ */
+void move(struct SnakeNode **head)
+{
+    /* black magic */
+    struct SnakeNode *last = last_node(*head);
+    last->prev->next = NULL;
+    *last = **head;
+    (*head)->next = last;
+    move_head(head);
+}
+
 int main(int argc, char **argv)
 {
     printf("Hello snake!\n");
