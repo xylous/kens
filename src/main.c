@@ -56,16 +56,29 @@ int **create_grid(void)
     return rows;
 }
 
+/**
+ * Map out an entire snake onto a grid
+ */
+void update_grid(int ***grid, struct SnakeNode *head)
+{
+    for (; head != NULL; head = head->next) {
+        (*grid)[head->y][head->x] = 1;
+    }
+}
+
 int main(int argc, char **argv)
 {
     printf("Hello snake!\n");
 
     int **grid = create_grid();
 
+    struct SnakeNode *head = new_snakenode(0, 0);
+    update_grid(&grid, head);
+
     for (int i = 0; i < SCREEN_HEIGHT; i++) {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
             if (grid[i][j] != 0) {
-                printf("%d", grid[i][j]);
+                printf("x");
             } else {
                 printf("-");
             }
