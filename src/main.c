@@ -115,6 +115,11 @@ void render_grid(int **grid)
         }
         printf("\n");
     }
+
+    /* Move cursor back to the beginning of input */
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        printf("\033[A");
+    }
 }
 
 /**
