@@ -70,15 +70,11 @@ void update_grid(int ***grid, struct SnakeNode *head)
     }
 }
 
-int main(int argc, char **argv)
+/**
+ * Print a grid to stdout
+ */
+void render_grid(int **grid)
 {
-    printf("Hello snake!\n");
-
-    int **grid = create_grid();
-
-    struct SnakeNode *head = new_snakenode(0, 0);
-    update_grid(&grid, head);
-
     for (int i = 0; i < SCREEN_HEIGHT; i++) {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
             if (grid[i][j] != 0) {
@@ -89,4 +85,16 @@ int main(int argc, char **argv)
         }
         printf("\n");
     }
+}
+
+int main(int argc, char **argv)
+{
+    printf("Hello snake!\n");
+
+    int **grid = create_grid();
+    struct SnakeNode *head = new_snakenode(0, 0);
+    update_grid(&grid, head);
+    render_grid(grid);
+
+    return 0;
 }
