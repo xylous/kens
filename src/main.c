@@ -25,12 +25,24 @@
 #define GRID_FRUIT  3
 
 /**
+ * Basic directions for snake nodes
+ */
+enum direction
+{
+    up,
+    down,
+    right,
+    left,
+};
+
+/**
  * Linked lists.
  */
 struct SnakeNode
 {
     int x;
     int y;
+    enum direction dir;
     struct SnakeNode *next;
 };
 
