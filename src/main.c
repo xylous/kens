@@ -77,11 +77,21 @@ void render_grid(int **grid)
 {
     for (int i = 0; i < SCREEN_HEIGHT; i++) {
         for (int j = 0; j < SCREEN_WIDTH; j++) {
-            if (grid[i][j] != 0) {
-                printf("x");
-            } else {
-                printf("-");
+            switch(grid[i][j]) {
+                case GRID_HEAD:
+                    printf("o");
+                    break;
+                case GRID_BODY:
+                    printf("x");
+                    break;
+                case GRID_FRUIT:
+                    printf("f");
+                    break;
+                default: /* empty cell */
+                    printf("-");
             }
+            /* Put some spaces in between so it doesn't look horrible */
+            printf(" ");
         }
         printf("\n");
     }
