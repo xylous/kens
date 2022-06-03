@@ -2,7 +2,7 @@
 
 A snake game for the terminal.
 
-<--
+<!--
 ## Getting started
 
 ### Requirements
@@ -16,7 +16,7 @@ A snake game for the terminal.
 ### Usage
 
 (How is this software used?)
---!>
+-->
 
 ## Contributing
 
