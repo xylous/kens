@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define SCREEN_HEIGHT   10
 #define SCREEN_WIDTH    10
@@ -119,7 +120,7 @@ void render_grid(int **grid)
 /**
  * Link two snake nodes together
  */
-void link(struct SnakeNode **from, struct SnakeNode **to)
+void link_nodes(struct SnakeNode **from, struct SnakeNode **to)
 {
     (*from)->next = *to;
     (*to)->prev = *from;
@@ -167,7 +168,7 @@ void move(struct SnakeNode **head)
     struct SnakeNode *last = last_node(*head);
     last->prev->next = NULL;
     *last = **head;
-    (*head)->next = last;
+    link_nodes(head, &last);
     move_head(head);
 }
 
@@ -179,10 +180,14 @@ int main(int argc, char **argv)
     struct SnakeNode *head = new_snakenode(0, 0);
     struct SnakeNode *last = new_snakenode(0, 1);
     head->dir = right;
-    link(&head, &last);
+    link_nodes(&head, &last);
 
-    update_grid(&grid, head);
-    render_grid(grid);
+    for (int ticks = 0; ticks < 5; ticks++) {
+        update_grid(&grid, head);
+        render_grid(grid);
+        usleep(10000 * 25);
+        move(&head);
+    }
 
     return 0;
 }
