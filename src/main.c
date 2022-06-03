@@ -17,8 +17,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SCREEN_WIDTH 10
-#define SCREEN_HEIGHT 10
+#define SCREEN_HEIGHT   10
+#define SCREEN_WIDTH    10
+
+#define GRID_HEAD   1
+#define GRID_BODY   2
+#define GRID_FRUIT  3
 
 /**
  * Linked lists.
