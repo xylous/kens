@@ -65,8 +65,10 @@ int **create_grid(void)
  */
 void update_grid(int ***grid, struct SnakeNode *head)
 {
-    for (; head != NULL; head = head->next) {
-        (*grid)[head->y][head->x] = 1;
+    (*grid)[head->y][head->x] = GRID_HEAD;
+
+    for (struct SnakeNode *body = head->next; body != NULL; body = body->next) {
+        (*grid)[body->y][body->x] = GRID_BODY;
     }
 }
 
@@ -103,6 +105,8 @@ int main(int argc, char **argv)
 
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
+    struct SnakeNode *body = new_snakenode(0, 1);
+    head->next = body;
     update_grid(&grid, head);
     render_grid(grid);
 
