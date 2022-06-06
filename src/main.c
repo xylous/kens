@@ -255,7 +255,7 @@ struct Fruit *new_fruit(int x, int y)
 struct Fruit **possible_positions(struct Fruit **list, struct SnakeNode *snake)
 {
     struct Fruit **possibilities = calloc(SCREEN_HEIGHT * SCREEN_WIDTH, sizeof(struct Fruit));
-    int length;
+    int length = 0;
 
     for (int y = 0; y < SCREEN_HEIGHT; y ++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
@@ -268,11 +268,29 @@ struct Fruit **possible_positions(struct Fruit **list, struct SnakeNode *snake)
         possibilities[snake->x + snake->y] = NULL;
     }
     for (int i = 0; i < NUM_FRUIT; i++) {
-        if (list[i] != NULL)
+        if (list[i] != NULL) {
             possibilities[list[i]->x + list[i]->y] = NULL;
+        }
     }
 
     return possibilities;
+}
+
+/**
+ * Pick a random entry in the list of possible fruit. At the same time, remove
+ * it from the list of possibilities
+ */
+struct Fruit *pick_random(struct Fruit **possible)
+{
+    struct Fruit *result = new_fruit(0, 0);
+    while (1) {
+        int r = random() % (SCREEN_WIDTH * SCREEN_HEIGHT);
+        if (possible[r] != NULL) {
+            *result = *(possible[r]);
+            possible[r] = NULL;
+            return result;
+        }
+    }
 }
 
 int main(int argc, char **argv)
