@@ -147,11 +147,14 @@ struct SnakeNode *last_node(struct SnakeNode *head)
 void move_head(struct SnakeNode **head)
 {
     switch ((*head)->dir) {
+        /* Since the origin of the screen is in the top left corner, when the
+         * snake is going down, the Y co-ordinate is increasing, and vice-versa
+         */
         case up:
-            (*head)->y++;
+            (*head)->y--;
             break;
         case down:
-            (*head)->y--;
+            (*head)->y++;
             break;
         case right:
             (*head)->x++;
@@ -159,6 +162,15 @@ void move_head(struct SnakeNode **head)
         case left:
             (*head)->x--;
             break;
+    }
+    if ((*head)->x >= SCREEN_WIDTH) {
+        (*head)->x = 0;
+    } else if ((*head)->x < 0) {
+        (*head)->x = SCREEN_WIDTH - 1;
+    } else if ((*head)->y >= SCREEN_HEIGHT) {
+        (*head)->y = 0;
+    } else if ((*head)->y < 0) {
+        (*head)->y = SCREEN_HEIGHT - 1;
     }
 }
 
