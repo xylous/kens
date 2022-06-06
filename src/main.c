@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ncurses.h>
 
 #define SCREEN_HEIGHT   10
 #define SCREEN_WIDTH    10
@@ -99,27 +100,24 @@ void render_grid(int **grid)
         for (int j = 0; j < SCREEN_WIDTH; j++) {
             switch(grid[i][j]) {
                 case GRID_HEAD:
-                    printf("o");
+                    printw("o");
                     break;
                 case GRID_BODY:
-                    printf("x");
+                    printw("x");
                     break;
                 case GRID_FRUIT:
-                    printf("f");
+                    printw("f");
                     break;
                 default: /* empty cell */
-                    printf("-");
+                    printw("-");
             }
             /* Put some spaces in between so it doesn't look horrible */
-            printf(" ");
+            printw(" ");
         }
-        printf("\n");
+        printw("\n");
     }
-
-    /* Move cursor back to the beginning of input */
-    for (int i = 0; i < SCREEN_HEIGHT; i++) {
-        printf("\033[A");
-    }
+    refresh();
+    move(0, 0);
 }
 
 /**
@@ -167,7 +165,7 @@ void move_head(struct SnakeNode **head)
 /**
  * Move the snake along
  */
-void move(struct SnakeNode **head)
+void move_snake(struct SnakeNode **head)
 {
     /* black magic */
     struct SnakeNode *last = last_node(*head);
@@ -183,16 +181,25 @@ int main(int argc, char **argv)
 
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
-    struct SnakeNode *last = new_snakenode(0, 1);
+    struct SnakeNode *tail = new_snakenode(0, 1);
+    link_nodes(&head, &tail);
     head->dir = right;
-    link_nodes(&head, &last);
 
-    for (int ticks = 0; ticks < 5; ticks++) {
+    initscr();
+    timeout(0.3);
+    noecho();
+    cbreak();
+    keypad(stdscr, TRUE);
+
+    int ch = 0;
+    while((ch = getch()) != NULL) {
         update_grid(&grid, head);
         render_grid(grid);
-        usleep(10000 * 25);
-        move(&head);
+        usleep(1000 * 400);
+        move_snake(&head);
     }
+
+    endwin();
 
     return 0;
 }
