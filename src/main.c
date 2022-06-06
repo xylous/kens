@@ -26,6 +26,8 @@
 #define GRID_BODY   2
 #define GRID_FRUIT  3
 
+#define NUM_FRUIT   1
+
 /**
  * Basic directions for snake nodes
  */
@@ -225,6 +227,15 @@ void change_direction(struct SnakeNode *head, int ch)
     head->dir = dir;
 }
 
+/**
+ * Create a list of fruit in heap memory
+ */
+struct Fruit *create_fruit_list()
+{
+    struct Fruit *list = calloc(NUM_FRUIT, sizeof(struct Fruit));
+    return list;
+}
+
 int main(int argc, char **argv)
 {
     printf("Hello snake!\n");
@@ -232,6 +243,8 @@ int main(int argc, char **argv)
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
     head->dir = right;
+
+    struct Fruit *fruit_list = create_fruit_list();
 
     initscr();
     timeout(0.3);
