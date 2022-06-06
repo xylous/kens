@@ -123,10 +123,10 @@ void render_grid(int **grid)
 /**
  * Link two snake nodes together
  */
-void link_nodes(struct SnakeNode **from, struct SnakeNode **to)
+void link_nodes(struct SnakeNode *from, struct SnakeNode *to)
 {
-    (*from)->next = *to;
-    (*to)->prev = *from;
+    from->next = to;
+    to->prev = from;
 }
 
 /**
@@ -144,47 +144,47 @@ struct SnakeNode *last_node(struct SnakeNode *head)
 /**
  * Update the head cell with the new position
  */
-void move_head(struct SnakeNode **head)
+void move_head(struct SnakeNode *head)
 {
-    switch ((*head)->dir) {
+    switch (head->dir) {
         /* Since the origin of the screen is in the top left corner, when the
          * snake is going down, the Y co-ordinate is increasing, and vice-versa
          */
         case up:
-            (*head)->y--;
+            head->y--;
             break;
         case down:
-            (*head)->y++;
+            head->y++;
             break;
         case right:
-            (*head)->x++;
+            head->x++;
             break;
         case left:
-            (*head)->x--;
+            head->x--;
             break;
     }
-    if ((*head)->x >= SCREEN_WIDTH) {
-        (*head)->x = 0;
-    } else if ((*head)->x < 0) {
-        (*head)->x = SCREEN_WIDTH - 1;
-    } else if ((*head)->y >= SCREEN_HEIGHT) {
-        (*head)->y = 0;
-    } else if ((*head)->y < 0) {
-        (*head)->y = SCREEN_HEIGHT - 1;
+    if (head->x >= SCREEN_WIDTH) {
+        head->x = 0;
+    } else if (head->x < 0) {
+        head->x = SCREEN_WIDTH - 1;
+    } else if (head->y >= SCREEN_HEIGHT) {
+        head->y = 0;
+    } else if (head->y < 0) {
+        head->y = SCREEN_HEIGHT - 1;
     }
 }
 
 /**
  * Move the snake along
  */
-void move_snake(struct SnakeNode **head)
+void move_snake(struct SnakeNode *head)
 {
     /* black magic */
-    if ((*head)->next != NULL) {
-        struct SnakeNode *last = last_node(*head);
+    if (head->next != NULL) {
+        struct SnakeNode *last = last_node(head);
         last->prev->next = NULL;
-        *last = **head;
-        link_nodes(head, &last);
+        *last = *head;
+        link_nodes(head, last);
     }
     move_head(head);
 }
@@ -236,7 +236,7 @@ int main(int argc, char **argv)
         update_grid(&grid, head);
         render_grid(grid);
         usleep(1000 * 400);
-        move_snake(&head);
+        move_snake(head);
     }
 
     endwin();
