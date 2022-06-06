@@ -168,10 +168,12 @@ void move_head(struct SnakeNode **head)
 void move_snake(struct SnakeNode **head)
 {
     /* black magic */
-    struct SnakeNode *last = last_node(*head);
-    last->prev->next = NULL;
-    *last = **head;
-    link_nodes(head, &last);
+    if ((*head)->next != NULL) {
+        struct SnakeNode *last = last_node(*head);
+        last->prev->next = NULL;
+        *last = **head;
+        link_nodes(head, &last);
+    }
     move_head(head);
 }
 
@@ -181,8 +183,6 @@ int main(int argc, char **argv)
 
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
-    struct SnakeNode *tail = new_snakenode(0, 1);
-    link_nodes(&head, &tail);
     head->dir = right;
 
     initscr();
