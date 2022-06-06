@@ -189,6 +189,33 @@ void move_snake(struct SnakeNode **head)
     move_head(head);
 }
 
+/**
+ * Change the direction of the head based on the input character
+ */
+void change_direction(struct SnakeNode *head, int ch)
+{
+    enum direction dir = head->dir;
+    switch (ch){
+        case KEY_UP:
+            if (dir != down)
+                dir = up;
+            break;
+        case KEY_DOWN:
+            if (dir != up)
+                dir = down;
+            break;
+        case KEY_RIGHT:
+            if (dir != left)
+                dir = right;
+            break;
+        case KEY_LEFT:
+            if (dir != right)
+                dir = left;
+            break;
+    }
+    head->dir = dir;
+}
+
 int main(int argc, char **argv)
 {
     printf("Hello snake!\n");
@@ -205,6 +232,7 @@ int main(int argc, char **argv)
 
     int ch = 0;
     while((ch = getch()) != NULL) {
+        change_direction(head, ch);
         update_grid(&grid, head);
         render_grid(grid);
         usleep(1000 * 400);
