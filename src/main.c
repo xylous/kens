@@ -231,9 +231,9 @@ void change_direction(struct SnakeNode *head, int ch)
 /**
  * Create a list of fruit in heap memory
  */
-struct Fruit *create_fruit_list()
+struct Fruit **create_fruit_list()
 {
-    struct Fruit *list = calloc(NUM_FRUIT, sizeof(struct Fruit));
+    struct Fruit **list = calloc(NUM_FRUIT, sizeof(struct Fruit *));
     return list;
 }
 
@@ -246,6 +246,33 @@ struct Fruit *new_fruit(int x, int y)
     fruit->x = x;
     fruit->y = y;
     return fruit;
+}
+
+/**
+ * Return a list of all possible fruit positions that don't overlap with the
+ * snake and with other fruit.
+ */
+struct Fruit **possible_positions(struct Fruit **list, struct SnakeNode *snake)
+{
+    struct Fruit **possibilities = calloc(SCREEN_HEIGHT * SCREEN_WIDTH, sizeof(struct Fruit));
+    int length;
+
+    for (int y = 0; y < SCREEN_HEIGHT; y ++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
+            possibilities[length++] = new_fruit(x, y);
+        }
+    }
+
+    /* Remove all impossibilities */
+    for (; snake != NULL; snake = snake->next) {
+        possibilities[snake->x + snake->y] = NULL;
+    }
+    for (int i = 0; i < NUM_FRUIT; i++) {
+        if (list[i] != NULL)
+            possibilities[list[i]->x + list[i]->y] = NULL;
+    }
+
+    return possibilities;
 }
 
 int main(int argc, char **argv)
@@ -261,14 +288,13 @@ int main(int argc, char **argv)
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
     head->dir = right;
-    struct Fruit *fruit_list = create_fruit_list();
+    struct Fruit **fruit_list = create_fruit_list();
 
     /* Main game loop */
     int ch = 0;
     while((ch = getch()) != NULL) { /* if NULL, then we received a SIGTERM */
         change_direction(head, ch);
         update_grid(&grid, head);
-        render_grid(grid);
         usleep(1000 * 400);
         move_snake(head);
     }
