@@ -293,6 +293,20 @@ struct Fruit *pick_random(struct Fruit **possible)
     }
 }
 
+/**
+ * For every fruit slot available, create a fruit at a random position that
+ * doesn't overlap with the snake
+ */
+void fill_list_of_fruit(struct Fruit **list, struct SnakeNode *snake)
+{
+    struct Fruit **possible = possible_positions(list, snake);
+    for (int i = 0; i < NUM_FRUIT; i++) {
+        if (list[i] == NULL) {
+            list[i] = pick_random(possible);
+        }
+    }
+}
+
 int main(int argc, char **argv)
 {
     /* Initialise ncurses */
@@ -311,6 +325,7 @@ int main(int argc, char **argv)
     /* Main game loop */
     int ch = 0;
     while((ch = getch()) != NULL) { /* if NULL, then we received a SIGTERM */
+        fill_list_of_fruit(fruit_list, head);
         change_direction(head, ch);
         update_grid(&grid, head);
         usleep(1000 * 400);
