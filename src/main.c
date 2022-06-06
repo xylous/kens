@@ -238,22 +238,21 @@ struct Fruit *create_fruit_list()
 
 int main(int argc, char **argv)
 {
-    printf("Hello snake!\n");
-
-    int **grid = create_grid();
-    struct SnakeNode *head = new_snakenode(0, 0);
-    head->dir = right;
-
-    struct Fruit *fruit_list = create_fruit_list();
-
+    /* Initialise ncurses */
     initscr();
     timeout(0.3);
     noecho();
     cbreak();
     keypad(stdscr, TRUE);
 
+    int **grid = create_grid();
+    struct SnakeNode *head = new_snakenode(0, 0);
+    head->dir = right;
+    struct Fruit *fruit_list = create_fruit_list();
+
+    /* Main game loop */
     int ch = 0;
-    while((ch = getch()) != NULL) {
+    while((ch = getch()) != NULL) { /* if NULL, then we received a SIGTERM */
         change_direction(head, ch);
         update_grid(&grid, head);
         render_grid(grid);
@@ -261,6 +260,7 @@ int main(int argc, char **argv)
         move_snake(head);
     }
 
+    /* Close ncurses session */
     endwin();
 
     return 0;
