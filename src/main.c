@@ -90,13 +90,17 @@ int **create_grid(void)
 /**
  * Map out an entire snake onto a grid
  */
-void update_grid(int ***grid, struct SnakeNode *head)
+void update_grid(int ***grid, struct SnakeNode *head, struct Fruit **list)
 {
     /* Reinitialise the grid */
     free(*grid);
     (*grid) = create_grid();
 
     (*grid)[head->y][head->x] = GRID_HEAD;
+
+    for (int i = 0; i < NUM_FRUIT; i++) {
+        (*grid)[list[i]->y][list[i]->x] = GRID_FRUIT;
+    }
 
     for (struct SnakeNode *body = head->next; body != NULL; body = body->next) {
         (*grid)[body->y][body->x] = GRID_BODY;
@@ -327,7 +331,8 @@ int main(int argc, char **argv)
     while((ch = getch()) != NULL) { /* if NULL, then we received a SIGTERM */
         fill_list_of_fruit(fruit_list, head);
         change_direction(head, ch);
-        update_grid(&grid, head);
+        update_grid(&grid, head, fruit_list);
+        render_grid(grid);
         usleep(1000 * 400);
         move_snake(head);
     }
