@@ -50,6 +50,15 @@ struct SnakeNode
 };
 
 /**
+ * All we need to know is the location of the fruit.
+ */
+struct Fruit
+{
+    int x;
+    int y;
+};
+
+/**
  * Create a new SnakeNode at the specified position
  */
 struct SnakeNode *new_snakenode(int x, int y)
