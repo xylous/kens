@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ncurses.h>
+#include <time.h>
 
 #define SCREEN_HEIGHT   10
 #define SCREEN_WIDTH    10
@@ -236,6 +237,17 @@ struct Fruit *create_fruit_list()
     return list;
 }
 
+/**
+ * Create a new fruit at the given co-ordinates
+ */
+struct Fruit *new_fruit(int x, int y)
+{
+    struct Fruit *fruit = malloc(sizeof(struct Fruit));
+    fruit->x = x;
+    fruit->y = y;
+    return fruit;
+}
+
 int main(int argc, char **argv)
 {
     /* Initialise ncurses */
@@ -244,6 +256,7 @@ int main(int argc, char **argv)
     noecho();
     cbreak();
     keypad(stdscr, TRUE);
+    srandom(time(NULL));
 
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
