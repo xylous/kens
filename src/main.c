@@ -311,6 +311,20 @@ void fill_list_of_fruit(struct Fruit **list, struct SnakeNode *snake)
     }
 }
 
+/**
+ * If the head is touching any piece of fruit, return the fruit's index in the
+ * list. Otherwise, return -1.
+ */
+int head_eats_fruit(struct Fruit **list, struct SnakeNode *head)
+{
+    for (int i = 0; i < NUM_FRUIT; i++) {
+        if (list[i]->x == head->x && list[i]->y == head->y) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 int main(int argc, char **argv)
 {
     /* Initialise ncurses */
