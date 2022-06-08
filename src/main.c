@@ -390,6 +390,12 @@ int main(int argc, char **argv)
         render_grid(grid);
         usleep(1000 * 400);
         move_snake(head);
+
+        int eaten_fruit = head_eats_fruit(fruit_list, head);
+        if (eaten_fruit != -1) {
+            fruit_list[eaten_fruit] = NULL; /* remove the eaten fruit from the game */
+            expand_snake(head);
+        }
     }
 
     /* Close ncurses session */
