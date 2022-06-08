@@ -325,6 +325,46 @@ int head_eats_fruit(struct Fruit **list, struct SnakeNode *head)
     return -1;
 }
 
+/**
+ * Add another segment to the snake
+ */
+void expand_snake(struct SnakeNode *snake)
+{
+    struct SnakeNode *last = last_node(snake);
+    int x = last->x, y = last->y;
+
+    switch (last->dir) {
+        /* Since the origin of the screen is in the top left corner, when the
+         * snake is going down, the Y co-ordinate is increasing, and vice-versa
+         */
+        case up:
+            y++;
+            break;
+        case down:
+            y--;
+            break;
+        case right:
+            x--;
+            break;
+        case left:
+            x++;
+            break;
+    }
+    if (x >= SCREEN_WIDTH) {
+        x = 0;
+    } else if (x < 0) {
+        x = SCREEN_WIDTH - 1;
+    } else if (y >= SCREEN_HEIGHT) {
+        y = 0;
+    } else if (y < 0) {
+        y = SCREEN_HEIGHT - 1;
+    }
+
+    struct SnakeNode *new_last = new_snakenode(x, y);
+    link_nodes(last, new_last);
+    new_last->next = NULL;
+}
+
 int main(int argc, char **argv)
 {
     /* Initialise ncurses */
