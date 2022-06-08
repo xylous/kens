@@ -200,8 +200,11 @@ void move_snake(struct SnakeNode *head)
         struct SnakeNode *last = last_node(head);
         last->prev->next = NULL;
         *last = *head;
-        link_nodes(last, head->next);
+        struct SnakeNode *rest_of_snake = head->next;
         link_nodes(head, last);
+        if (rest_of_snake != NULL) {
+            link_nodes(last, rest_of_snake);
+        }
     }
     move_head(head);
 }
