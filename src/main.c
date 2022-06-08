@@ -29,6 +29,10 @@
 
 #define NUM_FRUIT   1
 
+#define END_TIE     -1
+#define END_WIN     0
+#define END_LOSE    1
+
 /**
  * Basic directions for snake nodes
  */
@@ -379,10 +383,13 @@ int main(int argc, char **argv)
     keypad(stdscr, TRUE);
     srandom(time(NULL));
 
+    int snake_length = 1;
     int **grid = create_grid();
     struct SnakeNode *head = new_snakenode(0, 0);
     head->dir = right;
     struct Fruit **fruit_list = create_fruit_list();
+
+    int win = END_TIE;
 
     /* Main game loop */
     int ch = 0;
@@ -398,11 +405,29 @@ int main(int argc, char **argv)
         if (eaten_fruit != -1) {
             fruit_list[eaten_fruit] = NULL; /* remove the eaten fruit from the game */
             expand_snake(head);
+            snake_length++;
+        }
+
+        if (snake_length == SCREEN_HEIGHT * SCREEN_WIDTH) {
+            win = END_WIN;
+            break;
         }
     }
 
     /* Close ncurses session */
     endwin();
+
+    switch(win) {
+        case END_TIE:
+            printf("You left the game. Not a win, not a lose.\n");
+            break;
+        case END_WIN:
+            printf("You won! Congrats!\n");
+            break;
+        case END_LOSE:
+            printf("You lost! Try again.\n");
+            break;
+    }
 
     return 0;
 }
