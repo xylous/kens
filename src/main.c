@@ -23,6 +23,7 @@
 #define SCREEN_HEIGHT   10
 #define SCREEN_WIDTH    10
 
+#define GRID_EMPTY  0
 #define GRID_HEAD   1
 #define GRID_BODY   2
 #define GRID_FRUIT  3
@@ -373,6 +374,22 @@ void expand_snake(struct SnakeNode *snake)
     new_last->next = NULL;
 }
 
+/**
+ * Count all non-empty squares on the grid
+ */
+int lit_squares(int **grid)
+{
+    int result = 0;
+    for (int i = 0; i < SCREEN_HEIGHT; i++) {
+        for (int j = 0; j < SCREEN_WIDTH; j++) {
+            if (grid[i][j] != GRID_EMPTY) {
+                result++;
+            }
+        }
+    }
+    return result;
+}
+
 int main(int argc, char **argv)
 {
     /* Initialise ncurses */
@@ -401,16 +418,21 @@ int main(int argc, char **argv)
         usleep(1000 * 400);
         move_snake(head);
 
+        /* Check win/lose conditions */
+        if (snake_length == SCREEN_HEIGHT * SCREEN_WIDTH) {
+            win = END_WIN;
+            break;
+        } else if (lit_squares(grid) - NUM_FRUIT != snake_length) {
+            /* only true if some snake nodes overlap */
+            win = END_LOSE;
+            break;
+        }
+
         int eaten_fruit = head_eats_fruit(fruit_list, head);
         if (eaten_fruit != -1) {
             fruit_list[eaten_fruit] = NULL; /* remove the eaten fruit from the game */
             expand_snake(head);
             snake_length++;
-        }
-
-        if (snake_length == SCREEN_HEIGHT * SCREEN_WIDTH) {
-            win = END_WIN;
-            break;
         }
     }
 
