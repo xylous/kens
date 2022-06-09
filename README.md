@@ -2,21 +2,37 @@
 
 A snake game for the terminal.
 
-<!--
 ## Getting started
 
 ### Requirements
 
-(What other software does this project depend on?)
+For building:
+
+- GNU make
+- GCC
+
+For running:
+
+- ncurses
 
 ### Installation
 
-(How can anyone get this software running, provided they meet the requirements?)
+Get the project directory and build with `make`. A `kens` binary should be made
+available after compiling is over.
+
+```
+git clone https://github.com/xylous/kens kens
+cd kens
+make
+```
 
 ### Usage
 
-(How is this software used?)
--->
+The basic snake game rules: use arrow keys to move the snake head around. Eat
+fruit to expand. If you overlap your snake, you lose. If you fill in the entire
+grid, you win. BUT: going through corners wraps you around to the other side.
+
+You have a 20-by-20 grid to work with, for a total of 400 squares.
 
 ## Contributing
 

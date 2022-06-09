@@ -410,7 +410,7 @@ int main(int argc, char **argv)
 
     /* Main game loop */
     int ch = 0;
-    while((ch = getch()) != NULL) { /* if NULL, then we received a SIGTERM */
+    while((ch = getch()) != KEY_ENTER) { /* if NULL, then we received a SIGTERM */
         fill_list_of_fruit(fruit_list, head);
         change_direction(head, ch);
         update_grid(&grid, head, fruit_list);
